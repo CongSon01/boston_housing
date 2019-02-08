@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def mean_squared_error(y_prediction, y_true):
@@ -47,9 +48,10 @@ def neuron(x, y, learning_rate=0.001, nr_of_epochs=10000):
 
 
 def main():
+
     boston_housing_data = read_csv_file('mass_boston.csv')
 
-    # Split features and output to predict (y = median house value)
+    # Split features and output variable (y = median house value)
     features = boston_housing_data[:, 0:13]
     y = boston_housing_data[:, 13]
 
@@ -58,9 +60,15 @@ def main():
     max = features.max(axis=0)
     norm_features = (features - min) / (max - min)
 
-    # TODO Analyse covariance
+    # Covariance matrix to find features with highest covariance with output variable
+    cov = np.corrcoef(boston_housing_data.T)
 
-    # Select features
+    plt.matshow(cov, cmap='seismic')
+    plt.xticks(np.arange(14))
+    plt.yticks(np.arange(14))
+    plt.show()
+
+    # Select features with highest covariance (5 = rm, 10 = ptratio, 12 = lstat)
     selected_features = norm_features[:, [5, 10, 12]]
 
     # Add bias
