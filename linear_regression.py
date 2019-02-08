@@ -56,6 +56,15 @@ def gradient_descent(x, y, learning_rate=0.001, nr_of_epochs=10000):
     return weights, error_mse, error_rmse
 
 
+def print_subplot(axs, error_rmse, rmse_normal_equation, learning_rate):
+    axs.plot(error_rmse)
+    axs.set_title('Learning rate {:0.5f}'.format(learning_rate))
+    axs.set_xlabel('Nr. of Epochs')
+    axs.set_ylabel('RMSE')
+    axs.axhline(rmse_normal_equation, color='red', linestyle='dotted')
+    axs.set_ylim([0, 30])
+
+
 def predict(x, weights):
     return np.dot(x, weights)
 
@@ -96,6 +105,7 @@ def main():
     predictions = predict(x_train, weights)
 
     print("Weights {}".format(weights))
+    rmse_normal_equation = rmse(predictions, y_train)
 
     print("Train: MSE {} / RMSE {}".format(mse(predictions, y_train), rmse(predictions, y_train)))
 
@@ -103,10 +113,13 @@ def main():
 
     print("Test: MSE {} / RMSE {}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
 
-    print("Linear regression via gradient descent")
+    fig, axs = plt.subplots(2)
 
-    nr_of_epochs = 10000
+    # Linear regression via gradient descent with optimal learning rate
+    nr_of_epochs = 1000
     learning_rate = 0.001
+
+    print("Linear regression via gradient descent (learning rate {:0.5f})".format(learning_rate))
 
     weights, error_mse, error_rmse = gradient_descent(x_train, y_train, learning_rate, nr_of_epochs)
     predictions = predict(x_train, weights)
@@ -117,12 +130,29 @@ def main():
 
     predictions = predict(x_test, weights)
 
-    print("Test: MSE {} / RMSE {}".format(mse(predictions, y_test), rmse(predictions, y_test)))
+    print("Test: MSE {} / RMSE {}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
 
-    # TODO Show effect if learning rate is too low or too high
+    print_subplot(axs[0], error_rmse, rmse_normal_equation, learning_rate)
 
-    # TODO Add plots for RMSE and linear regression
+    # Linear regression via gradient descent with small learning rate
+    learning_rate = 0.00001
 
+    print("Linear regression via gradient descent (learning rate {:0.5f})".format(learning_rate))
+
+    weights, error_mse, error_rmse = gradient_descent(x_train, y_train, learning_rate, nr_of_epochs)
+    predictions = predict(x_train, weights)
+
+    print("Weights {}".format(weights))
+
+    print("Train: MSE {} / RMSE {}".format(mse(predictions, y_train), rmse(predictions, y_train)))
+
+    predictions = predict(x_test, weights)
+
+    print("Test: MSE {} / RMSE {}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
+
+    print_subplot(axs[1], error_rmse, rmse_normal_equation, learning_rate)
+
+    plt.show()
 
 if __name__ == '__main__':
     main()
