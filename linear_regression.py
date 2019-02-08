@@ -2,12 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def mean_squared_error(y_prediction, y_true):
+def mse(y_prediction, y_true):
+    # Calculate mean square error (mse)
     return np.average((y_true - y_prediction) ** 2)
 
 
-def root_mean_squared_error(y_prediction, y_true):
-    return np.sqrt(mean_squared_error(y_true, y_prediction))
+def rmse(y_prediction, y_true):
+    # Calculate root mean square error (mse)
+    return np.sqrt(mse(y_true, y_prediction))
 
 
 def read_csv_file(file):
@@ -31,20 +33,31 @@ def normal_equation(x, y):
     return np.matmul(np.matmul(np.linalg.inv(np.matmul(x.T, x)), x.T), y)
 
 
-def neuron(x, y, learning_rate=0.001, nr_of_epochs=10000):
+def gradient_descent(x, y, learning_rate=0.001, nr_of_epochs=10000):
     weights = np.zeros(x.shape[1])
+    error_mse = []
+    error_rmse = []
 
     for i in range(nr_of_epochs):
-        output = np.dot(x, weights)
-        errors = (y - output)
 
+        # Calculate output (= prediction) of activation function
+        prediction = predict(x, weights)
+
+        # Calculate error between prediction and output variable
+        errors = (y - prediction)
+
+        # Calculate gradient descent to update weights
         gradient = np.dot(x.T, errors)
-
         weights += learning_rate * gradient
 
-        # print("Train: MSE {} / RMSE {}".format(mean_squared_error(output, y_train), rmse(output, y_train)))
+        error_mse.append(mse(prediction, y))
+        error_rmse.append(rmse(prediction, y))
 
-    return weights
+    return weights, error_mse, error_rmse
+
+
+def predict(x, weights):
+    return np.dot(x, weights)
 
 
 def main():
@@ -80,37 +93,31 @@ def main():
     print("Linear regression via normal equation")
 
     weights = normal_equation(x_train, y_train)
-
-    predictions = np.dot(x_train, weights)
+    predictions = predict(x_train, weights)
 
     print("Weights {}".format(weights))
 
-    print("Train: MSE {} / RMSE {}"
-          .format(mean_squared_error(predictions, y_train), root_mean_squared_error(predictions, y_train)))
+    print("Train: MSE {} / RMSE {}".format(mse(predictions, y_train), rmse(predictions, y_train)))
 
-    predictions = np.dot(x_test, weights)
+    predictions = predict(x_test, weights)
 
-    print("Test: MSE {} / RMSE {}"
-          .format(mean_squared_error(predictions, y_test), root_mean_squared_error(predictions, y_test)))
+    print("Test: MSE {} / RMSE {}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
 
     print("Linear regression via gradient descent")
 
     nr_of_epochs = 10000
     learning_rate = 0.001
 
-    weights = neuron(x_train, y_train, learning_rate, nr_of_epochs)
-
-    predictions = np.dot(x_train, weights)
+    weights, error_mse, error_rmse = gradient_descent(x_train, y_train, learning_rate, nr_of_epochs)
+    predictions = predict(x_train, weights)
 
     print("Weights {}".format(weights))
 
-    print("Train: MSE {} / RMSE {}"
-          .format(mean_squared_error(predictions, y_train), root_mean_squared_error(predictions, y_train)))
+    print("Train: MSE {} / RMSE {}".format(mse(predictions, y_train), rmse(predictions, y_train)))
 
-    predictions = np.dot(x_test, weights)
+    predictions = predict(x_test, weights)
 
-    print("Test: MSE {} / RMSE {}"
-          .format(mean_squared_error(predictions, y_test), root_mean_squared_error(predictions, y_test)))
+    print("Test: MSE {} / RMSE {}".format(mse(predictions, y_test), rmse(predictions, y_test)))
 
     # TODO Show effect if learning rate is too low or too high
 
