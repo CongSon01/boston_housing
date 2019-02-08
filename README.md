@@ -12,3 +12,6 @@ equation. Second, LR is found approximative via Gradient Descent (GD).
 ![Covariance Matrix](imgs/rmse_epoch.png)
 
 ## Requirements
+
+The following code has been tested using [Python](https://www.python.org/) 3.7.1, [NumPy](https://www.numpy.org/) 1.15.4, 
+and [Matplotlib](https://matplotlib.org/) 3.0.2 using [Anaconda](https://www.anaconda.com/distribution/#download-section).
