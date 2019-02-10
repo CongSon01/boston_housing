@@ -73,6 +73,9 @@ def main():
 
     boston_housing_data = read_csv_file('mass_boston.csv')
 
+    # Change printing precision of matrices
+    np.set_printoptions(precision=3)
+
     # Split features and output variable (y = median house value)
     features = boston_housing_data[:, 0:13]
     y = boston_housing_data[:, 13]
@@ -89,6 +92,8 @@ def main():
     plt.xticks(np.arange(14))
     plt.yticks(np.arange(14))
     plt.show()
+
+    print("Correlation with MEDV {}\n".format(cov[13]))
 
     # Select features with highest covariance (5 = rm, 10 = ptratio, 12 = lstat)
     selected_features = norm_features[:, [5, 10, 12]]
@@ -107,11 +112,11 @@ def main():
     print("Weights {}".format(weights))
     rmse_normal_equation = rmse(predictions, y_train)
 
-    print("Train: MSE {} / RMSE {}".format(mse(predictions, y_train), rmse(predictions, y_train)))
+    print("Train: MSE {:2.4f} / RMSE {:1.4f}".format(mse(predictions, y_train), rmse(predictions, y_train)))
 
     predictions = predict(x_test, weights)
 
-    print("Test: MSE {} / RMSE {}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
+    print("Test: MSE {:2.4f} / RMSE {:1.4f}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
 
     fig, axs = plt.subplots(2)
 
@@ -126,11 +131,11 @@ def main():
 
     print("Weights {}".format(weights))
 
-    print("Train: MSE {} / RMSE {}".format(mse(predictions, y_train), rmse(predictions, y_train)))
+    print("Train: MSE {:2.4f} / RMSE {:1.4f}".format(mse(predictions, y_train), rmse(predictions, y_train)))
 
     predictions = predict(x_test, weights)
 
-    print("Test: MSE {} / RMSE {}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
+    print("Test: MSE {:2.4f} / RMSE {:1.4f}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
 
     print_subplot(axs[0], error_rmse, rmse_normal_equation, learning_rate)
 
@@ -144,11 +149,11 @@ def main():
 
     print("Weights {}".format(weights))
 
-    print("Train: MSE {} / RMSE {}".format(mse(predictions, y_train), rmse(predictions, y_train)))
+    print("Train: MSE {:2.4f} / RMSE {:1.4f}".format(mse(predictions, y_train), rmse(predictions, y_train)))
 
     predictions = predict(x_test, weights)
 
-    print("Test: MSE {} / RMSE {}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
+    print("Test: MSE {:2.4f} / RMSE {:1.4f}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
 
     print_subplot(axs[1], error_rmse, rmse_normal_equation, learning_rate)
 
