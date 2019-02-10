@@ -36,7 +36,7 @@ Index | Name    | Description
 12    | LSTAT   | % lower status of the population
 13    | MEDV    | Median value of owner-occupied homes in $1000's
 
-To find the most meaningful features for the LR, we first conduct a covariance analysis:
+To find the most meaningful features for the LR, we first conduct a covariance analysis of all features:
 
 ![Covariance Matrix](imgs/covariance_matrix.png)
 
@@ -46,7 +46,7 @@ Correlation with MEDV [-0.388  0.36  -0.484  0.175 -0.427  0.695 -0.377  0.25  -
 ```
 
 It turns out, that RM (feature 5) has a strong positive correlation with MEDV (feature 13), while PTRATIO (feature 10) 
-and LSTAT (feature 12) have a strong negative correlation with MEDV. Hence, for the further evaluation we will focus on 
+and LSTAT (feature 12) have a strong negative correlation with MEDV. Hence, for the further evaluation we consider 
 these three features only.
 
 Next, we add a bias (1) to each row in the dataset and split the dataset into training set (80% of the data) and 
@@ -76,7 +76,7 @@ In the following, we have two different scenarios, viz. one with a higher learni
 a smaller learning rate (i.e. 0.00001). In both scenarios, we train the neuron by 1000 epochs.
 
 In case of higher learning rate, we can observe that the neuron is able to approximate LR correctly. That is, both 
-the weights as well as the measures (i.e. MSE and RMSE) are almost identical compared with LR by means of normal 
+the weights as well as the measures (i.e. MSE and RMSE) are almost identical when compared with LR by means of normal 
 equation.
 
 ```
@@ -86,7 +86,7 @@ Train: MSE 28.0412 / RMSE 5.2954
 Test: MSE 26.7880 / RMSE 5.1757
 ```
 
-In case of lower learning rate, we can observe that the neuron is not able to converge its weights as quickly.
+In case of lower learning rate, we can observe that the neuron is not able to achieve the same measures and weights.
 
 ```
 Linear regression via gradient descent (learning rate 0.00001)
@@ -95,10 +95,10 @@ Train: MSE 72.1460 / RMSE 8.4939
 Test: MSE 90.8260 / RMSE 9.5303
 ```
 
-The same effect can also be observed by plotting the RMSE for each epoch during training. If the learning rate
+This effect can also be observed by plotting the RMSE for each epoch during training. That is, if the learning rate
 is high enough, the neuron or more precisely gradient descent is able to converge the weights quickly. As a result, we 
 can observe that the RMSE of the neuron (highlighted in blue) converges to the optimal RMSE (highlighted in red) after 
-few  epochs. Note that the optimal RMSE represents LR by means of normal equation. However, if the learning rate is too 
+few epochs. Note that the optimal RMSE represents LR by means of normal equation. However, if the learning rate is too 
 low, gradient descent converges only very slowly. Similarly, the learning rate can also be too large. As a result, 
 gradient descent would miss the optimal weight settings completely.
 
