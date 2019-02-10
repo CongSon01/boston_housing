@@ -9,7 +9,7 @@ def mse(y_prediction, y_true):
 
 def rmse(y_prediction, y_true):
     # Calculate root mean square error (mse)
-    return np.sqrt(mse(y_true, y_prediction))
+    return np.sqrt(mse(y_prediction, y_true))
 
 
 def read_csv_file(file):
