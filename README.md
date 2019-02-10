@@ -36,7 +36,7 @@ Index | Name    | Description
 12    | LSTAT   | % lower status of the population
 13    | MEDV    | Median value of owner-occupied homes in $1000's
 
-To find the most meaningful features for the LR, we first conduct a covariance analysis of all features:
+To find the most meaningful features for LR, we first conduct a covariance analysis of all features:
 
 ![Covariance Matrix](imgs/covariance_matrix.png)
 
@@ -95,12 +95,12 @@ Train: MSE 72.1460 / RMSE 8.4939
 Test: MSE 90.8260 / RMSE 9.5303
 ```
 
-This effect can also be observed by plotting the RMSE for each epoch during training. That is, if the learning rate
-is high enough, the neuron or more precisely gradient descent is able to converge the weights quickly. As a result, we 
-can observe that the RMSE of the neuron (highlighted in blue) converges to the optimal RMSE (highlighted in red) after 
-few epochs. Note that the optimal RMSE represents LR by means of normal equation. However, if the learning rate is too 
-low, gradient descent converges only very slowly. Similarly, the learning rate can also be too large. As a result, 
-gradient descent would miss the optimal weight settings completely.
+This effect can also be observed by plotting the RMSE for each epoch during training (see figure below). That is, if 
+the learning rate is high enough, the neuron or more precisely gradient descent is able to converge the weights quickly. 
+As a result, we can observe that the RMSE of the neuron (highlighted in blue) converges to the optimal RMSE 
+(highlighted in red) after few epochs. Note that the optimal RMSE represents LR by means of normal equation. However, 
+if the learning rate is too low, gradient descent converges only very slowly. Similarly, the learning rate can also be 
+too large. As a result, gradient descent would miss the optimal weight settings completely.
 
 ![RMSE_EPOCH](imgs/rmse_epoch.png)
 
