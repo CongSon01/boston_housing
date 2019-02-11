@@ -78,11 +78,11 @@ Test: MSE 18.8056 / RMSE 4.3365
 ### LR by means of gradient descent
 
 However, rather than computing the regression coefficients of LR directly, one could also train a single artificial 
-neuron to approximate LR. That is, the weights of a neuron are trained by means of gradient descent to approximate 
+neuron to approximate LR. That is, the weights of a neuron are trained by means of Gradient Descent (GD) to approximate 
 the regression coefficients of LR.
 
 In the following, we have two different scenarios, viz. one with a higher learning rate (i.e. 0.00100) and one with 
-a smaller learning rate (i.e. 0.00001). In both scenarios, we train the neuron in 1000 epochs.
+a smaller learning rate (i.e. 0.00001). In both scenarios, we train the neuron by means of 1000 epochs.
 
 In case of higher learning rate, we can observe that the neuron is able to approximate LR quickly. That is, both 
 the weights as well as the measures (i.e. MSE and RMSE) are almost identical when compared with LR by means of normal 
@@ -105,11 +105,11 @@ Test: MSE 69.2193 / RMSE 8.3198
 ```
 
 This effect can also be observed by plotting the RMSE for each epoch during training (see figure below). That is, if 
-the learning rate is high enough, the neuron or more precisely gradient descent is able to converge the weights quickly. 
-As a result, we can observe that the RMSE of the neuron (highlighted in blue) converges to the optimal RMSE 
-(highlighted in red) after few epochs. Note that the optimal RMSE represents LR by means of normal equation. However, 
-if the learning rate is too low, gradient descent converges only very slowly. Similarly, the learning rate can also be 
-too large. As a result, gradient descent would miss the optimal weight settings completely.
+the learning rate is high enough, the neuron or more precisely GD is able to converge the weights quickly. As a result, 
+we can observe that the RMSE of the neuron (highlighted in blue) converges to the optimal RMSE (highlighted in red) 
+after few epochs. Note that the optimal RMSE represents LR by means of normal equation. However, if the learning rate 
+is too low, GD converges only very slowly. Similarly, the learning rate can also be too large. As a result, GD would 
+miss the optimal weight settings completely.
 
 ![RMSE_EPOCH](imgs/rmse_epoch.png)
 
