@@ -2,6 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def read_csv_file(file):
+    # Read data from CSV file
+    data = np.genfromtxt(file, delimiter=',', dtype=np.float, skip_header=True)
+    return data
+
+
 def mse(y_prediction, y_true):
     # Calculate mean square error (mse)
     return np.average((y_true - y_prediction) ** 2)
@@ -12,12 +18,8 @@ def rmse(y_prediction, y_true):
     return np.sqrt(mse(y_prediction, y_true))
 
 
-def read_csv_file(file):
-    data = np.genfromtxt(file, delimiter=',', dtype=np.float, skip_header=True)
-    return data
-
-
 def train_test_split(x, y, train_size=0.8):
+    # Split data into training and test set
     train_size = int(len(x) * train_size)
 
     x_train = x[:train_size]
@@ -30,10 +32,12 @@ def train_test_split(x, y, train_size=0.8):
 
 
 def normal_equation(x, y):
+    # Linear regression via normal equation
     return np.matmul(np.matmul(np.linalg.inv(np.matmul(x.T, x)), x.T), y)
 
 
 def gradient_descent(x, y, learning_rate=0.001, nr_of_epochs=10000):
+    # Linear regression via gradient descent
     weights = np.zeros(x.shape[1])
     error_mse = []
     error_rmse = []
@@ -56,6 +60,11 @@ def gradient_descent(x, y, learning_rate=0.001, nr_of_epochs=10000):
     return weights, error_mse, error_rmse
 
 
+def predict(x, weights):
+    # Predict output (i.e. MEDV) based on given features (x) and weights
+    return np.dot(x, weights)
+
+
 def print_subplot(axs, error_rmse, rmse_normal_equation, learning_rate):
     axs.plot(error_rmse)
     axs.set_title('Learning rate {:0.5f}'.format(learning_rate))
@@ -65,16 +74,15 @@ def print_subplot(axs, error_rmse, rmse_normal_equation, learning_rate):
     axs.set_ylim([0, 30])
 
 
-def predict(x, weights):
-    return np.dot(x, weights)
-
-
 def main():
 
     boston_housing_data = read_csv_file('mass_boston.csv')
 
     # Change printing precision of matrices
     np.set_printoptions(precision=3)
+
+    # Remove entries where MEDV is equal to 50.0, as this variable has been censored for higher values
+    boston_housing_data = boston_housing_data[boston_housing_data[:, 13] != 50.0]
 
     # Split features and output variable (y = median house value)
     features = boston_housing_data[:, 0:13]
@@ -95,8 +103,8 @@ def main():
 
     print("Correlation with MEDV {}\n".format(cov[13]))
 
-    # Select features with highest covariance (5 = rm, 10 = ptratio, 12 = lstat)
-    selected_features = norm_features[:, [5, 10, 12]]
+    # Select features with highest covariance (2 = INDUS, 4 = NOX, 5 = RM, 9 = TAX, 10 = PTRATIO, 12 = LSTAT)
+    selected_features = norm_features[:, [2, 4, 5, 9, 10, 12]]
 
     # Add bias
     x = np.c_[np.ones((len(selected_features))), selected_features]
@@ -158,6 +166,7 @@ def main():
     print_subplot(axs[1], error_rmse, rmse_normal_equation, learning_rate)
 
     plt.show()
+
 
 if __name__ == '__main__':
     main()

@@ -16,7 +16,8 @@ python linear_regression.py
 
 ### Preprocessing 
 
-In the first step, the script automatically reads and normalises the CSV file (i.e. `mass_boston.csv`). That is, all 
+In the first step, the script automatically reads, cleans and normalises the CSV file (i.e. `mass_boston.csv`). That is, 
+all entries where MEDV is equal to 50.0 are removed, as this variable has been censored for higher values. Next, all 
 features (0 to 12 in the table below) are scaled into [0,1] by means of a min-max normalisation.
 
 Index | Name    | Description
@@ -41,29 +42,37 @@ To find the most meaningful features for LR, we first conduct a covariance analy
 ![Covariance Matrix](imgs/covariance_matrix.png)
 
 ```
-Correlation with MEDV [-0.388  0.36  -0.484  0.175 -0.427  0.695 -0.377  0.25  -0.382 -0.469
- -0.508  0.333 -0.738  1.   ]
+Correlation with MEDV [-0.45   0.405 -0.6    0.075 -0.524  0.687 -0.493  0.369 -0.476 -0.572
+ -0.519  0.365 -0.76   1.   ]
 ```
 
-It turns out, that RM (feature 5) has a strong positive correlation with MEDV (feature 13), while PTRATIO (feature 10) 
-and LSTAT (feature 12) have a strong negative correlation with MEDV. Hence, for the further evaluation we consider 
-these three features only.
+For the further evaluation we consider only features that have a positive or negative correlation that is greater than 
+0.5:
 
-Next, we add a bias (1) to each row in the dataset and split the dataset into training set (80% of the data) and 
+Index | Name    | Correlation with MEDV
+----- | --------|-------------
+2     | INDUS   | -0.600
+4     | NOX     | -0.524
+5     | RM      | +0.687
+9     | TAX     | -0.572
+10    | PTRATIO | -0.519 
+12    | LSTAT   | -0.760
+
+Next, we add a bias of 1 to each entry in the dataset and split the dataset into training set (80% of the data) and 
 an test set (20% of the data).
 
 ### LR by means of normal equation
 
 Using the training set, we can directly compute the weights (i.e. regression coefficients) of the LR (i.e. one 
-weight for the bias and three weights for the selected features) using normal equation. The trained weights can then 
+weight for the bias and six weights for the selected features) using normal equation. The trained weights can then 
 be used to predict MEDV. That is, LR is evaluated by means of Mean Squared Error (MSE) and Root Mean Squared Error 
 (RMSE) on both training and test set:
 
 ```
 Linear regression via normal equation
-Weights [ 17.183  29.569  -6.752 -18.133]
-Train: MSE 28.0405 / RMSE 5.2953
-Test: MSE 26.9861 / RMSE 5.1948
+Weights [ 18.448  -1.121   0.734  25.841  -4.089  -6.367 -13.639]
+Train: MSE 16.4714 / RMSE 4.0585
+Test: MSE 18.8056 / RMSE 4.3365
 ```
 
 ### LR by means of gradient descent
@@ -73,26 +82,26 @@ neuron to approximate LR. That is, the weights of a neuron are trained by means 
 the regression coefficients of LR.
 
 In the following, we have two different scenarios, viz. one with a higher learning rate (i.e. 0.00100) and one with 
-a smaller learning rate (i.e. 0.00001). In both scenarios, we train the neuron by 1000 epochs.
+a smaller learning rate (i.e. 0.00001). In both scenarios, we train the neuron in 1000 epochs.
 
-In case of higher learning rate, we can observe that the neuron is able to approximate LR correctly. That is, both 
+In case of higher learning rate, we can observe that the neuron is able to approximate LR quickly. That is, both 
 the weights as well as the measures (i.e. MSE and RMSE) are almost identical when compared with LR by means of normal 
 equation.
 
 ```
 Linear regression via gradient descent (learning rate 0.00100)
-Weights [ 17.37   29.325  -6.787 -18.268]
-Train: MSE 28.0412 / RMSE 5.2954
-Test: MSE 26.7880 / RMSE 5.1757
+Weights [ 18.647  -1.144   0.755  25.564  -4.077  -6.394 -13.788]
+Train: MSE 16.4722 / RMSE 4.0586
+Test: MSE 18.7043 / RMSE 4.3248
 ```
 
-In case of lower learning rate, we can observe that the neuron is not able to achieve the same measures and weights.
+In case of lower learning rate, we can observe that the neuron is not able to converge so quickly.
 
 ```
 Linear regression via gradient descent (learning rate 0.00001)
-Weights [15.388 11.707  4.218 -0.701]
-Train: MSE 72.1460 / RMSE 8.4939
-Test: MSE 90.8260 / RMSE 9.5303
+Weights [14.385  0.052  0.602 10.423 -0.091  4.264 -0.685]
+Train: MSE 54.5219 / RMSE 7.3839
+Test: MSE 69.2193 / RMSE 8.3198
 ```
 
 This effect can also be observed by plotting the RMSE for each epoch during training (see figure below). That is, if 
