@@ -127,6 +127,7 @@ def main():
     print("Test: MSE {:2.4f} / RMSE {:1.4f}\n".format(mse(predictions, y_test), rmse(predictions, y_test)))
 
     fig, axs = plt.subplots(2)
+    plt.subplots_adjust(hspace=0.6)
 
     # Linear regression via gradient descent with optimal learning rate
     nr_of_epochs = 1000
